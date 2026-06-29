@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stop Procrastinating. Start Now.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- EmailJS — sends real emails from the browser, no backend needed -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0D0F1A; --violet: #7C3AED; --violet-light: #9D65FF;
+    --yellow: #F5E642; --white: #F0EEF8; --muted: #8B89A8;
+    --card: #16192A; --border: #2A2D45;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--navy); color: var(--white); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; background: rgba(13,15,26,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  .logo { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 900; letter-spacing: 0.04em; color: var(--yellow); text-transform: uppercase; }
+  .logo span { color: var(--white); }
+  .nav-cta { background: var(--violet); color: var(--white); border: none; border-radius: 6px; padding: 10px 22px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.1s; }
+  .nav-cta:hover { background: var(--violet-light); transform: translateY(-1px); }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 120px 24px 80px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(124,58,237,0.18) 0%, transparent 70%); pointer-events: none; }
+  .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.25; pointer-events: none; animation: drift 8s ease-in-out infinite alternate; }
+  .orb-1 { width:500px; height:500px; background:var(--violet); top:-100px; left:-150px; }
+  .orb-2 { width:350px; height:350px; background:var(--yellow); bottom:-80px; right:-80px; animation-delay:3s; }
+  @keyframes drift { from { transform:translate(0,0); } to { transform:translate(30px,20px); } }
+  .eyebrow { display: inline-block; background: rgba(124,58,237,0.2); border: 1px solid rgba(124,58,237,0.5); color: var(--violet-light); font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; padding: 6px 18px; border-radius: 100px; margin-bottom: 28px; }
+  .hero-headline { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(64px, 12vw, 160px); font-weight: 900; line-height: 0.92; text-transform: uppercase; margin-bottom: 28px; }
+  .hero-headline .accent { color: var(--yellow); }
+  .hero-headline .line-break { display: block; }
+  .counter-wrapper { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 28px; margin-bottom: 36px; }
+  .counter-label { font-size: 13px; color: var(--muted); }
+  .counter-digits { font-family: 'Barlow Condensed', sans-serif; font-size: 36px; font-weight: 900; color: var(--yellow); letter-spacing: 0.04em; min-width: 80px; }
+  .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: #EF4444; animation: pulse-anim 1s ease-in-out infinite; }
+  @keyframes pulse-anim { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(1.5);} }
+  .hero-sub { font-size: 18px; color: var(--muted); max-width: 520px; line-height: 1.6; margin-bottom: 44px; }
+  .hero-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--yellow); color: var(--navy); border: none; border-radius: 8px; padding: 18px 40px; font-size: 16px; font-weight: 700; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; text-transform: uppercase; letter-spacing: 0.06em; }
+  .hero-cta:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(245,230,66,0.3); }
+  .hero-cta svg { width:18px; height:18px; }
+  .scroll-hint { margin-top: 60px; display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .scroll-arrow { animation: bounce 1.6s ease-in-out infinite; }
+  @keyframes bounce { 0%,100%{transform:translateY(0);}50%{transform:translateY(6px);} }
+
+  /* STRIP */
+  .strip { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 24px 48px; display: flex; align-items: center; justify-content: center; gap: 60px; flex-wrap: wrap; background: var(--card); }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Barlow Condensed', sans-serif; font-size: 42px; font-weight: 900; color: var(--yellow); }
+  .stat-txt { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  /* SECTIONS */
+  section { padding: 100px 24px; }
+  .section-inner { max-width: 900px; margin: 0 auto; }
+  .section-title { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(42px, 7vw, 80px); font-weight: 900; text-transform: uppercase; line-height: 0.95; margin-bottom: 24px; }
+  .section-title .accent { color: var(--yellow); }
+  .section-body { font-size: 17px; color: var(--muted); line-height: 1.7; max-width: 620px; }
+  .pain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 56px; }
+  .pain-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 28px; transition: border-color 0.2s, transform 0.2s; }
+  .pain-card:hover { border-color: var(--violet); transform: translateY(-4px); }
+  .pain-icon { font-size: 32px; margin-bottom: 14px; }
+  .pain-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .pain-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .steps { margin-top: 56px; display: flex; flex-direction: column; }
+  .step { display: flex; gap: 32px; align-items: flex-start; padding: 32px 0; border-bottom: 1px solid var(--border); }
+  .step:last-child { border-bottom: none; }
+  .step-num { font-family: 'Barlow Condensed', sans-serif; font-size: 80px; font-weight: 900; color: var(--border); line-height: 1; min-width: 80px; margin-top: -10px; transition: color 0.2s; }
+  .step:hover .step-num { color: var(--violet); }
+  .step-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+  .step-desc { font-size: 15px; color: var(--muted); line-height: 1.6; }
+  .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 56px; }
+  .testi-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 28px; }
+  .testi-quote { font-size: 15px; color: var(--white); line-height: 1.65; margin-bottom: 20px; font-style: italic; }
+  .testi-quote::before { content:'\201C'; color:var(--violet); font-size:24px; font-style:normal; line-height:1; display:block; margin-bottom:4px; }
+  .testi-author { display: flex; align-items: center; gap: 12px; }
+  .testi-avatar { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px; color:var(--navy); }
+  .testi-name { font-weight:600; font-size:14px; }
+  .testi-role { font-size:12px; color:var(--muted); }
+  .cta-band { background: linear-gradient(135deg, var(--violet) 0%, #4C1D95 100%); padding: 80px 24px; text-align: center; }
+  .cta-band h2 { font-family:'Barlow Condensed',sans-serif; font-size:clamp(48px,8vw,90px); font-weight:900; text-transform:uppercase; line-height:0.95; margin-bottom:20px; }
+  .cta-band p { font-size:17px; color:rgba(255,255,255,0.75); margin-bottom:36px; }
+
+  /* MODAL */
+  .modal-overlay { display:none; position:fixed; inset:0; z-index:1000; background:rgba(7,8,18,0.92); backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:20px; }
+  .modal-overlay.active { display:flex; }
+  .modal { background:var(--card); border:1px solid var(--border); border-radius:16px; width:100%; max-width:540px; max-height:90vh; overflow-y:auto; padding:40px; position:relative; animation:modal-in 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+  @keyframes modal-in { from{opacity:0;transform:translateY(24px) scale(0.97);}to{opacity:1;transform:translateY(0) scale(1);} }
+  .modal-close { position:absolute; top:16px; right:20px; background:none; border:none; color:var(--muted); font-size:24px; cursor:pointer; transition:color 0.15s; }
+  .modal-close:hover { color:var(--white); }
+  .step-indicator { display:flex; align-items:center; gap:8px; margin-bottom:32px; }
+  .step-dot { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; background:var(--border); color:var(--muted); transition:all 0.25s; }
+  .step-dot.active { background:var(--violet); color:var(--white); }
+  .step-dot.done { background:var(--yellow); color:var(--navy); }
+  .step-line { flex:1; height:2px; background:var(--border); border-radius:2px; }
+  .step-line.done { background:var(--yellow); }
+  .form-section { display:none; }
+  .form-section.active { display:block; }
+  .modal-title { font-family:'Barlow Condensed',sans-serif; font-size:36px; font-weight:900; text-transform:uppercase; line-height:1; margin-bottom:6px; }
+  .modal-title .accent { color:var(--yellow); }
+  .modal-subtitle { font-size:14px; color:var(--muted); margin-bottom:28px; line-height:1.5; }
+
+  /* FORM */
+  .form-group { margin-bottom:20px; }
+  label { display:block; font-size:13px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px; }
+  input, textarea, select { width:100%; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:8px; color:var(--white); font-family:'Inter',sans-serif; font-size:15px; padding:12px 16px; transition:border-color 0.2s,box-shadow 0.2s; outline:none; appearance:none; }
+  input::placeholder, textarea::placeholder { color:#4A4D6A; }
+  input:focus, textarea:focus, select:focus { border-color:var(--violet); box-shadow:0 0 0 3px rgba(124,58,237,0.15); }
+  select option { background:var(--card); }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .reason-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:4px; }
+  .reason-card { background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:10px; padding:14px 12px; cursor:pointer; transition:all 0.15s; text-align:center; }
+  .reason-card:hover { border-color:var(--violet); background:rgba(124,58,237,0.08); }
+  .reason-card.selected { border-color:var(--violet); background:rgba(124,58,237,0.18); }
+  .reason-card input { display:none; }
+  .reason-emoji { font-size:24px; display:block; margin-bottom:6px; }
+  .reason-text { font-size:12px; color:var(--white); font-weight:500; line-height:1.3; }
+
+  /* CALENDAR */
+  .month-nav { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+  .month-label { font-weight:700; font-size:16px; }
+  .month-btn { background:var(--border); border:none; color:var(--white); width:32px; height:32px; border-radius:6px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; transition:background 0.15s; }
+  .month-btn:hover { background:var(--violet); }
+  .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+  .cal-day-name { text-align:center; font-size:11px; font-weight:600; color:var(--muted); text-transform:uppercase; padding:6px 0; }
+  .cal-day { aspect-ratio:1; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; cursor:pointer; border:1px solid transparent; transition:all 0.15s; }
+  .cal-day.empty { pointer-events:none; }
+  .cal-day.past { color:var(--border); pointer-events:none; }
+  .cal-day.available { background:rgba(255,255,255,0.04); color:var(--white); border-color:var(--border); }
+  .cal-day.available:hover { border-color:var(--violet); background:rgba(124,58,237,0.12); }
+  .cal-day.selected { background:var(--violet); border-color:var(--violet); color:var(--white); font-weight:700; }
+  .cal-day.today { border-color:var(--yellow); color:var(--yellow); }
+  .time-slots-label { font-size:13px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin:20px 0 10px; }
+  .time-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .time-slot { padding:10px; border-radius:8px; border:1px solid var(--border); background:rgba(255,255,255,0.03); text-align:center; cursor:pointer; font-size:13px; font-weight:500; transition:all 0.15s; }
+  .time-slot:hover { border-color:var(--violet); background:rgba(124,58,237,0.1); }
+  .time-slot.selected { background:var(--violet); border-color:var(--violet); color:var(--white); font-weight:700; }
+  .timezone-note { font-size:12px; color:var(--muted); margin-top:8px; }
+
+  /* BUTTONS */
+  .btn-row { display:flex; gap:12px; margin-top:28px; }
+  .btn-back { flex:0 0 auto; padding:14px 24px; border-radius:8px; border:1px solid var(--border); background:transparent; color:var(--muted); font-size:15px; font-weight:600; cursor:pointer; transition:all 0.15s; }
+  .btn-back:hover { border-color:var(--white); color:var(--white); }
+  .btn-next { flex:1; padding:14px 28px; border-radius:8px; border:none; background:var(--violet); color:var(--white); font-size:15px; font-weight:700; cursor:pointer; transition:all 0.15s; display:flex; align-items:center; justify-content:center; gap:8px; }
+  .btn-next:hover { background:var(--violet-light); transform:translateY(-2px); }
+  .btn-submit { flex:1; padding:14px 28px; border-radius:8px; border:none; background:var(--yellow); color:var(--navy); font-size:15px; font-weight:700; cursor:pointer; transition:all 0.15s; display:flex; align-items:center; justify-content:center; gap:8px; text-transform:uppercase; letter-spacing:0.06em; }
+  .btn-submit:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(245,230,66,0.25); }
+  .btn-submit:disabled { opacity:0.5; cursor:not-allowed; transform:none; box-shadow:none; }
+
+  /* CONFIRMATION */
+  .confirm-wrap { text-align:center; padding:20px 0; }
+  .confirm-icon { width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,var(--violet),var(--violet-light)); display:flex; align-items:center; justify-content:center; margin:0 auto 24px; font-size:36px; }
+  .confirm-title { font-family:'Barlow Condensed',sans-serif; font-size:44px; font-weight:900; text-transform:uppercase; color:var(--yellow); margin-bottom:12px; }
+  .confirm-subtitle { font-size:15px; color:var(--muted); line-height:1.6; margin-bottom:24px; }
+  .confirm-details { background:rgba(124,58,237,0.1); border:1px solid rgba(124,58,237,0.3); border-radius:12px; padding:20px 24px; text-align:left; margin-bottom:20px; }
+  .confirm-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); }
+  .confirm-row:last-child { border-bottom:none; }
+  .confirm-key { font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; font-weight:600; }
+  .confirm-val { font-size:14px; font-weight:600; }
+
+  /* ZOOM BOX */
+  .zoom-box { background:rgba(37,99,235,0.12); border:1px solid rgba(37,99,235,0.35); border-radius:10px; padding:16px 20px; display:flex; align-items:center; gap:14px; text-align:left; margin-bottom:16px; }
+  .zoom-logo { font-size:28px; }
+  .zoom-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; font-weight:600; }
+  .zoom-link-text { font-size:13px; color:#60A5FA; word-break:break-all; margin-top:2px; }
+
+  /* CALENDAR DOWNLOAD BUTTON */
+  .cal-download-btn { width:100%; display:flex; align-items:center; justify-content:center; gap:10px; background:rgba(255,255,255,0.06); border:1px solid var(--border); border-radius:10px; padding:14px 20px; color:var(--white); font-size:14px; font-weight:600; cursor:pointer; transition:all 0.15s; margin-bottom:16px; text-decoration:none; }
+  .cal-download-btn:hover { border-color:var(--violet); background:rgba(124,58,237,0.12); }
+
+  .email-note { font-size:13px; color:var(--muted); line-height:1.5; margin-bottom:8px; }
+  .email-note strong { color:var(--yellow); }
+
+  /* FOOTER */
+  footer { border-top:1px solid var(--border); padding:40px 48px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; }
+  .footer-copy { font-size:13px; color:var(--muted); }
+
+  /* SPINNER */
+  .spinner { width:18px; height:18px; border-radius:50%; border:2px solid transparent; border-top-color:currentColor; animation:spin 0.65s linear infinite; display:none; }
+  @keyframes spin { to{transform:rotate(360deg);} }
+
+  /* ERROR */
+  .error-msg { font-size:12px; color:#F87171; margin-top:6px; display:none; }
+  .error-msg.show { display:block; }
+  input.err, select.err, textarea.err { border-color:#EF4444; }
+
+  @media(max-width:640px) {
+    nav { padding:16px 20px; }
+    .modal { padding:28px 20px; }
+    .form-row { grid-template-columns:1fr; }
+    .reason-grid { grid-template-columns:1fr 1fr; }
+    .time-grid { grid-template-columns:repeat(2,1fr); }
+    .strip { gap:32px; }
+    footer { padding:32px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Beat<span>Delay</span></div>
+  <button class="nav-cta" onclick="openModal()">Free Trial Session →</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="eyebrow">⚡ Procrastination Coaching</div>
+  <h1 class="hero-headline">
+    <span class="line-break">You've been</span>
+    <span class="line-break accent">meaning to</span>
+    <span class="line-break">start. When?</span>
+  </h1>
+  <div class="counter-wrapper">
+    <div class="pulse-dot"></div>
+    <span class="counter-label">Minutes lost to procrastination today:</span>
+    <div class="counter-digits" id="counter">0.0</div>
+  </div>
+  <p class="hero-sub">One free 30-minute session could be the reason you actually start. No fluff. No judgment. Just real strategies built around your specific blockers.</p>
+  <button class="hero-cta" onclick="openModal()">
+    Reserve Your Free Trial
+    <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/></svg>
+  </button>
+  <div class="scroll-hint">
+    <span>Scroll to learn more</span>
+    <svg class="scroll-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7"/></svg>
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="strip">
+  <div class="stat"><div class="stat-num">200+</div><div class="stat-txt">Clients Unstuck</div></div>
+  <div class="stat"><div class="stat-num">4.9★</div><div class="stat-txt">Average Rating</div></div>
+  <div class="stat"><div class="stat-num">30min</div><div class="stat-txt">To Real Clarity</div></div>
+  <div class="stat"><div class="stat-num">Free</div><div class="stat-txt">First Session</div></div>
+</div>
+
+<!-- PAIN POINTS -->
+<section>
+  <div class="section-inner">
+    <div class="eyebrow">Sound familiar?</div>
+    <h2 class="section-title">Every day you<br><span class="accent">delay costs you.</span></h2>
+    <p class="section-body">Procrastination isn't laziness — it's an emotional regulation problem. And it has solutions. Let's find yours.</p>
+    <div class="pain-grid">
+      <div class="pain-card"><div class="pain-icon">🌀</div><div class="pain-title">The Endless Loop</div><div class="pain-desc">You plan, re-plan, re-schedule, and somehow nothing ever gets started. The list grows; the guilt doubles.</div></div>
+      <div class="pain-card"><div class="pain-icon">🔥</div><div class="pain-title">Deadline Chaos</div><div class="pain-desc">You only move under extreme pressure, producing rushed work you're not proud of — then vow to change. Repeat.</div></div>
+      <div class="pain-card"><div class="pain-icon">🧠</div><div class="pain-title">Overthinking Paralysis</div><div class="pain-desc">The task is "too big" or "not the right time." You need it to be perfect before you begin. So you never begin.</div></div>
+      <div class="pain-card"><div class="pain-icon">😶</div><div class="pain-title">Identity Erosion</div><div class="pain-desc">You've started to believe you're "just someone who can't follow through." That story is costing you more than you know.</div></div>
+      <div class="pain-card"><div class="pain-icon">⚡</div><div class="pain-title">Energy Mismatch</div><div class="pain-desc">You try to work when drained and rest when energized. Your system works against you, not with you.</div></div>
+      <div class="pain-card"><div class="pain-icon">📉</div><div class="pain-title">Career Stall</div><div class="pain-desc">That project, that pitch, that application — still in drafts. The gap between your potential and output keeps widening.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section style="background:var(--card); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="section-inner">
+    <div class="eyebrow">The Process</div>
+    <h2 class="section-title">How your<br><span class="accent">free session works.</span></h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-text"><div class="step-title">Tell me the one thing holding you back</div><div class="step-desc">A 60-second form — name, email, and your main reason for procrastinating. I read it before we meet so we skip straight to solving it.</div></div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-text"><div class="step-title">Pick your slot</div><div class="step-desc">Choose a date and time. You'll get an email confirmation with the Zoom link and a calendar invite — adds to Google, Apple, or Outlook in one click.</div></div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-text"><div class="step-title">We talk. We dig. We build a plan.</div><div class="step-desc">I already know your blocker walking in. Zero small talk. All 30 minutes on your actual problem.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="section-inner">
+    <div class="eyebrow">Real People, Real Results</div>
+    <h2 class="section-title">They finally<br><span class="accent">started too.</span></h2>
+    <div class="testi-grid">
+      <div class="testi-card"><div class="testi-quote">I'd been "about to start" my business for three years. After one session, I had my first client within the week.</div><div class="testi-author"><div class="testi-avatar" style="background:#F5E642;">M</div><div><div class="testi-name">Marcus T.</div><div class="testi-role">Freelance Designer</div></div></div></div>
+      <div class="testi-card"><div class="testi-quote">She already knew my situation before we said hello. No time wasted. Straight into the hard stuff.</div><div class="testi-author"><div class="testi-avatar" style="background:#7C3AED;color:white;">P</div><div><div class="testi-name">Priya S.</div><div class="testi-role">Product Manager</div></div></div></div>
+      <div class="testi-card"><div class="testi-quote">Took two minutes to book. Showed up and we were already deep in the actual problem. Left with a real system.</div><div class="testi-author"><div class="testi-avatar" style="background:#60A5FA;color:#0D0F1A;">J</div><div><div class="testi-name">James O.</div><div class="testi-role">PhD Student</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<div class="cta-band">
+  <h2>Your future self<br>is waiting.</h2>
+  <p>30 minutes. Zero cost. No commitment.<br>The hardest part is clicking the button — so click it.</p>
+  <button class="hero-cta" onclick="openModal()">
+    Reserve Your Free Session
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/></svg>
+  </button>
+</div>
+
+<footer>
+  <div class="logo">Beat<span>Delay</span></div>
+  <div class="footer-copy">© 2026 BeatDelay Coaching. All sessions via Zoom.</div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="outsideClick(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+
+    <div class="step-indicator" id="stepIndicator">
+      <div class="step-dot active" id="dot1">1</div>
+      <div class="step-line" id="line1"></div>
+      <div class="step-dot" id="dot2">2</div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="form-section active" id="step1">
+      <div class="modal-title">Quick<br><span class="accent">intro.</span></div>
+      <div class="modal-subtitle">60 seconds. I read this before we meet so we skip the warm-up and go straight to your problem.</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name *</label>
+          <input type="text" id="firstName" placeholder="Alex">
+          <div class="error-msg" id="err-firstName">Please enter your first name.</div>
+        </div>
+        <div class="form-group">
+          <label>Last Name *</label>
+          <input type="text" id="lastName" placeholder="Morgan">
+          <div class="error-msg" id="err-lastName">Please enter your last name.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address *</label>
+        <input type="email" id="email" placeholder="you@example.com">
+        <div class="error-msg" id="err-email">Please enter a valid email.</div>
+      </div>
+
+      <div class="form-group">
+        <label>Main reason you procrastinate *</label>
+        <div class="reason-grid">
+          <label class="reason-card" onclick="selectReason(this,'Fear of Failure')"><input type="radio" name="reason" value="Fear of Failure"><span class="reason-emoji">😰</span><span class="reason-text">Fear of Failure</span></label>
+          <label class="reason-card" onclick="selectReason(this,'Perfectionism')"><input type="radio" name="reason" value="Perfectionism"><span class="reason-emoji">🎯</span><span class="reason-text">Perfectionism</span></label>
+          <label class="reason-card" onclick="selectReason(this,'Overwhelm')"><input type="radio" name="reason" value="Overwhelm"><span class="reason-emoji">🌊</span><span class="reason-text">Overwhelm</span></label>
+          <label class="reason-card" onclick="selectReason(this,'Low Motivation')"><input type="radio" name="reason" value="Low Motivation"><span class="reason-emoji">😶</span><span class="reason-text">Low Motivation</span></label>
+          <label class="reason-card" onclick="selectReason(this,'Distraction')"><input type="radio" name="reason" value="Distraction"><span class="reason-emoji">📱</span><span class="reason-text">Distraction</span></label>
+          <label class="reason-card" onclick="selectReason(this,'Unclear Goals')"><input type="radio" name="reason" value="Unclear Goals"><span class="reason-emoji">🗺️</span><span class="reason-text">Unclear Goals</span></label>
+        </div>
+        <div class="error-msg" id="err-reason">Please pick your main reason.</div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-next" onclick="nextStep(1)">Next: Pick Your Time →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="form-section" id="step2">
+      <div class="modal-title">Pick your<br><span class="accent">slot.</span></div>
+      <p class="modal-subtitle">All sessions are 30 minutes via Zoom. Pick a date then a time.</p>
+
+      <div class="month-nav">
+        <button class="month-btn" onclick="changeMonth(-1)">‹</button>
+        <span class="month-label" id="monthLabel"></span>
+        <button class="month-btn" onclick="changeMonth(1)">›</button>
+      </div>
+      <div class="cal-grid" id="calGrid">
+        <div class="cal-day-name">Sun</div><div class="cal-day-name">Mon</div><div class="cal-day-name">Tue</div>
+        <div class="cal-day-name">Wed</div><div class="cal-day-name">Thu</div><div class="cal-day-name">Fri</div><div class="cal-day-name">Sat</div>
+      </div>
+      <div class="error-msg" id="err-date" style="margin-top:8px;">Please select a date.</div>
+
+      <div id="timeSlotsWrap" style="display:none;">
+        <div class="time-slots-label">Available times</div>
+        <div class="time-grid" id="timeGrid"></div>
+        <div class="timezone-note" id="tzNote"></div>
+        <div class="error-msg" id="err-time">Please select a time.</div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-back" onclick="goBack(2)">← Back</button>
+        <button class="btn-submit" id="submitBtn" onclick="submitBooking()">
+          <span id="submitLabel">Confirm &amp; Send Me the Zoom Link ✓</span>
+          <div class="spinner" id="submitSpinner"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 3: CONFIRMATION -->
+    <div class="form-section" id="step3">
+      <div class="confirm-wrap">
+        <div class="confirm-icon">🎉</div>
+        <div class="confirm-title">You're booked!</div>
+        <div class="confirm-subtitle">Check your inbox — confirmation email is on its way with your Zoom link and a calendar invite.</div>
+
+        <div class="confirm-details" id="confirmDetails"></div>
+
+        <div class="zoom-box">
+          <div class="zoom-logo">🎥</div>
+          <div>
+            <div class="zoom-label">Your Zoom Link</div>
+            <div class="zoom-link-text" id="zoomLinkDisplay"></div>
+          </div>
+        </div>
+
+        <a class="cal-download-btn" id="calDownloadBtn" download="session.ics">
+          📅 Add to Calendar (Google / Apple / Outlook)
+        </a>
+
+        <p class="email-note">Confirmation sent to <strong id="confirmEmail"></strong>. Check spam if you don't see it within a few minutes.</p>
+        <p class="email-note" style="margin-top:8px; color:var(--violet-light);">💡 Arrive 2 minutes early. Have a notepad ready. We hit the ground running.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+//  ★ YOUR SETTINGS — fill these in, nothing else to touch
+// ════════════════════════════════════════════════════════
+
+// 1. Your Zoom Personal Meeting Room link
+const ZOOM_LINK = "https://us05web.zoom.us/j/8751226142?pwd=rk5NV5qbxDzquGkPz5lsgJVkvQaUhv.1";
+
+// 2. Your name (shown in emails)
+const COACH_NAME = "SMK";
+
+// 3. EmailJS settings (free — setup instructions below)
+const EMAILJS_PUBLIC_KEY    = "kjdWom6mpnlIonB_n";
+const EMAILJS_SERVICE_ID    = "service_f4m579s";
+const EMAILJS_TEMPLATE_ID   = "template_deau62o";   // client confirmation email
+const EMAILJS_NOTIFY_TEMPLATE = "template_jwnhdhj"; // your own notification email
+
+// 4. Google Form (same as before — collects all responses in your Sheet)
+const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLScqihxfdli0c1gb-K_JsfwOTFMxVMkXVHZUhkyVJNdebhvl_g/formResponse";
+const FORM_FIELDS = {
+  firstName:   "entry.108346291",
+  lastName:    "entry.1113740458",
+  email:       "entry.931779369",
+  reason:      "entry.1217890497",
+  sessionDate: "entry.656360112",
+  sessionTime: "entry.1535464289",
+};
+
+// 5. Your available days (0=Sun 1=Mon 2=Tue 3=Wed 4=Thu 5=Fri 6=Sat)
+const AVAILABLE_DAYS = [1, 2, 3, 4, 5];
+
+// 6. Your time slots — edit to match your real availability
+const TIME_SLOTS = [
+  "9:00 AM", "9:20 AM", "9:40 AM",
+  "10:00 AM", "10:20 AM", "10:40 AM",
+  "11:00 AM", "11:20 AM", "11:40 AM",
+  "2:00 PM", "2:20 PM", "2:40 PM",
+  "3:00 PM", "3:20 PM", "3:40 PM",
+  "4:00 PM", "4:20 PM", "4:40 PM",
+];
+
+// ════════════════════════════════════════════════════════
+//  DO NOT EDIT BELOW THIS LINE
+// ════════════════════════════════════════════════════════
+
+// Init EmailJS
+emailjs.init(EMAILJS_PUBLIC_KEY);
+
+// Counter
+const startTime = Date.now();
+function updateCounter() {
+  const mins = (Date.now() - startTime) / 60000;
+  document.getElementById('counter').textContent = (mins * (280 / 1440)).toFixed(1);
+}
+updateCounter(); setInterval(updateCounter, 1000);
+
+// Modal
+function openModal() { document.getElementById('modalOverlay').classList.add('active'); document.body.style.overflow = 'hidden'; }
+function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); document.body.style.overflow = ''; }
+function outsideClick(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+
+// Steps
+function showStep(n) {
+  document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + n).classList.add('active');
+  document.getElementById('stepIndicator').style.display = n === 3 ? 'none' : 'flex';
+  updateStepUI(n);
+  document.getElementById('modal').scrollTop = 0;
+}
+function updateStepUI(n) {
+  for (let i = 1; i <= 2; i++) {
+    const d = document.getElementById('dot' + i);
+    if (!d) return;
+    d.classList.remove('active','done');
+    if (i < n) d.classList.add('done'); else if (i === n) d.classList.add('active');
+  }
+  document.getElementById('line1').classList.toggle('done', n > 1);
+}
+function goBack(from) { showStep(from - 1); }
+
+// Reason
+let selectedReason = '';
+function selectReason(card, value) {
+  document.querySelectorAll('.reason-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  selectedReason = value;
+  clearErr('reason');
+}
+
+// Errors
+function showErr(id, show) {
+  const e = document.getElementById('err-' + id); if (e) e.classList.toggle('show', show);
+  const f = document.getElementById(id); if (f) f.classList.toggle('err', show);
+}
+function clearErr(id) { showErr(id, false); }
+
+function validateStep1() {
+  let ok = true;
+  if (!document.getElementById('firstName').value.trim()) { showErr('firstName',true); ok=false; } else clearErr('firstName');
+  if (!document.getElementById('lastName').value.trim())  { showErr('lastName',true);  ok=false; } else clearErr('lastName');
+  const em = document.getElementById('email').value.trim();
+  if (!em || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { showErr('email',true); ok=false; } else clearErr('email');
+  if (!selectedReason) { showErr('reason',true); ok=false; } else clearErr('reason');
+  return ok;
+}
+
+function nextStep(from) {
+  if (from === 1 && !validateStep1()) return;
+  showStep(from + 1);
+  if (from + 1 === 2) renderCalendar();
+}
+
+// Calendar
+let calYear, calMonth, selectedDate = null, selectedTime = null;
+function renderCalendar() {
+  const today = new Date();
+  if (!calYear) { calYear = today.getFullYear(); calMonth = today.getMonth(); }
+  document.getElementById('monthLabel').textContent = new Date(calYear, calMonth).toLocaleString('default',{month:'long',year:'numeric'});
+  const grid = document.getElementById('calGrid');
+  while (grid.children.length > 7) grid.removeChild(grid.lastChild);
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  for (let i = 0; i < firstDay; i++) { const b = document.createElement('div'); b.className='cal-day empty'; grid.appendChild(b); }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const cell = document.createElement('div'); cell.className='cal-day'; cell.textContent=d;
+    const date = new Date(calYear, calMonth, d);
+    const isPast = date < new Date(today.getFullYear(),today.getMonth(),today.getDate());
+    const isAvail = AVAILABLE_DAYS.includes(date.getDay());
+    const isToday = date.toDateString() === today.toDateString();
+    if (isPast || !isAvail) { cell.classList.add('past'); if(!isAvail) cell.style.opacity='0.18'; }
+    else {
+      cell.classList.add('available');
+      if (isToday) cell.classList.add('today');
+      if (selectedDate && date.toDateString()===selectedDate.toDateString()) cell.classList.add('selected');
+      cell.addEventListener('click', () => selectDate(date, cell));
+    }
+    grid.appendChild(cell);
+  }
+}
+function changeMonth(dir) {
+  calMonth += dir;
+  if (calMonth>11){calMonth=0;calYear++;} if (calMonth<0){calMonth=11;calYear--;}
+  renderCalendar();
+}
+function selectDate(date, cell) {
+  selectedDate=date; selectedTime=null;
+  document.querySelectorAll('.cal-day.selected').forEach(c=>c.classList.remove('selected'));
+  cell.classList.add('selected'); clearErr('date'); renderTimeSlots();
+}
+function renderTimeSlots() {
+  document.getElementById('timeSlotsWrap').style.display='block';
+  const grid = document.getElementById('timeGrid'); grid.innerHTML='';
+  TIME_SLOTS.forEach(t => {
+    const slot = document.createElement('div'); slot.className='time-slot'; slot.textContent=t;
+    slot.addEventListener('click', () => {
+      document.querySelectorAll('.time-slot.selected').forEach(s=>s.classList.remove('selected'));
+      slot.classList.add('selected'); selectedTime=t; clearErr('time');
+    });
+    grid.appendChild(slot);
+  });
+  document.getElementById('tzNote').textContent = 'Times in your timezone: ' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
+
+// ── ICS CALENDAR FILE GENERATOR ──────────────────────────
+function generateICS(firstName, lastName, date, timeStr, zoomLink) {
+  // Parse the time string like "9:00 AM" or "2:30 PM"
+  const [timePart, meridiem] = timeStr.split(' ');
+  let [hours, minutes] = timePart.split(':').map(Number);
+  if (meridiem === 'PM' && hours !== 12) hours += 12;
+  if (meridiem === 'AM' && hours === 12) hours = 0;
+
+  const start = new Date(date.getFullYear(), date.getMonth(), date.getDate(), hours, minutes);
+  const end   = new Date(start.getTime() + 30 * 60 * 1000); // +30 mins
+
+  const pad = n => String(n).padStart(2,'0');
+  const fmt = d => `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//BeatDelay Coaching//EN',
+    'BEGIN:VEVENT',
+    `DTSTART:${fmt(start)}`,
+    `DTEND:${fmt(end)}`,
+    `SUMMARY:Free Coaching Session with ${COACH_NAME}`,
+    `DESCRIPTION:Your free 30-min procrastination coaching session.\\nZoom: ${zoomLink}`,
+    `LOCATION:${zoomLink}`,
+    `URL:${zoomLink}`,
+    'STATUS:CONFIRMED',
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].join('\r\n');
+
+  return ics;
+}
+
+// ── SUBMIT ────────────────────────────────────────────────
+async function submitBooking() {
+  if (!selectedDate) { showErr('date',true); return; }
+  if (!selectedTime) { showErr('time',true); return; }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  document.getElementById('submitLabel').style.display = 'none';
+  document.getElementById('submitSpinner').style.display = 'block';
+
+  const firstName   = document.getElementById('firstName').value.trim();
+  const lastName    = document.getElementById('lastName').value.trim();
+  const email       = document.getElementById('email').value.trim();
+  const sessionDate = selectedDate.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+  // 1) Send to Google Form (silent, for your Sheet)
+  try {
+    const body = new URLSearchParams();
+    body.append(FORM_FIELDS.firstName,   firstName);
+    body.append(FORM_FIELDS.lastName,    lastName);
+    body.append(FORM_FIELDS.email,       email);
+    body.append(FORM_FIELDS.reason,      selectedReason);
+    body.append(FORM_FIELDS.sessionDate, sessionDate);
+    body.append(FORM_FIELDS.sessionTime, selectedTime);
+    await fetch(GOOGLE_FORM_ACTION, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: body.toString() });
+  } catch(e) {}
+
+  // 2) Send confirmation email to CLIENT via EmailJS
+  try {
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_name:      firstName,
+      to_email:     email,
+      session_date: sessionDate,
+      session_time: selectedTime,
+      reason:       selectedReason,
+      zoom_link:    ZOOM_LINK,
+      coach_name:   COACH_NAME,
+    });
+  } catch(e) { console.warn('EmailJS client email failed:', e); }
+
+  // 3) Send notification email to YOU via EmailJS
+  try {
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_NOTIFY_TEMPLATE, {
+      client_name:  firstName + ' ' + lastName,
+      client_email: email,
+      session_date: sessionDate,
+      session_time: selectedTime,
+      reason:       selectedReason,
+    });
+  } catch(e) { console.warn('EmailJS notify email failed:', e); }
+
+  // 4) Generate ICS calendar file for download
+  const icsContent = generateICS(firstName, lastName, selectedDate, selectedTime, ZOOM_LINK);
+  const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  document.getElementById('calDownloadBtn').href = url;
+
+  // 5) Show confirmation screen
+  document.getElementById('confirmEmail').textContent    = email;
+  document.getElementById('zoomLinkDisplay').textContent = ZOOM_LINK;
+  document.getElementById('confirmDetails').innerHTML = `
+    <div class="confirm-row"><span class="confirm-key">Name</span><span class="confirm-val">${firstName} ${lastName}</span></div>
+    <div class="confirm-row"><span class="confirm-key">Date</span><span class="confirm-val">${sessionDate}</span></div>
+    <div class="confirm-row"><span class="confirm-key">Time</span><span class="confirm-val">${selectedTime} · 30 min</span></div>
+    <div class="confirm-row"><span class="confirm-key">Reason</span><span class="confirm-val">${selectedReason}</span></div>
+    <div class="confirm-row"><span class="confirm-key">Format</span><span class="confirm-val">Video Call · Zoom</span></div>
+  `;
+
+  document.getElementById('submitSpinner').style.display = 'none';
+  showStep(3);
+}
+</script>
+</body>
+</html>
